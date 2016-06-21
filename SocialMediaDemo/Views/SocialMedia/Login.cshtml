@@ -1,0 +1,98 @@
+﻿@model SocialMediaDemo.Models.LoginViewModel
+@using Microsoft.Owin.Security
+@{  
+    Layout = "~/Views/Shared/_socialMediaLayout.cshtml";
+}
+
+
+<div class="page-head">
+    <!-- BEGIN PAGE TITLE -->
+    <div class="page-title">
+        <h1>Social Media </h1>
+    </div>
+</div>
+<div class="row">
+      
+          <div class="portlet light">
+
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa  fa-cogs font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp bold uppercase">Login</span>
+                        <span class="caption-helper">social media authentication....</span>
+                    </div>
+                    
+                </div>
+              
+
+                <div class="portlet-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-12">
+                            @Html.ValidationSummary(true)  
+                             
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    
+                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" , @placeholder="UserName"})
+                                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                    
+                                </div>
+
+                                <div class="form-group">
+                                    
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                    
+                                </div>
+
+                                <div class="form-group">
+                                    
+                                        <input type="submit" value="Log in" class="btn btn-success col-md-offset-3" />
+                                        
+                                </div>
+                            </div>
+
+                            <div class="col-md-offset-7">
+                                @{
+                                    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+
+                                    if (loginProviders.Count() == 0)
+                                    {
+                                        <div class="form-group">
+                                                <b>There are no social media authentication service configured.</b>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @foreach (AuthenticationDescription p in loginProviders)
+                                            {
+                                                <button type="submit" class="btn btn-block btn-social  btn-@p.AuthenticationType.ToLower()"
+                                                        id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType"
+                                                        title="Log in using your @p.Caption account">
+                                                    <span class="fa fa-@p.AuthenticationType.ToLower()"></span> Sign in with @p.AuthenticationType
+                                                </button>
+                                            }
+                                        </div>
+
+
+                                    }
+                                }
+
+                            </div>
+
+                            <div>
+                               @Html.Label("Hello Github");
+                            </div>
+
+                            </div>
+                    }
+                  </div>
+            </div>
+
+
+</div>
+
